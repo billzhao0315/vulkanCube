@@ -61,9 +61,16 @@ target_compile_definitions(VulkanCube PRIVATE
 )
 
 
-# Copy shaders to build directory
+# Copy shaders to build directory (for running exe directly)
 add_custom_command(TARGET VulkanCube POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/shaders
     $<TARGET_FILE_DIR:VulkanCube>/shaders
+)
+
+# Copy shaders to CMake binary directory (for VS2022 debugger, working dir = $(ProjectDir))
+add_custom_command(TARGET VulkanCube POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/shaders
+    ${CMAKE_BINARY_DIR}/shaders
 )
