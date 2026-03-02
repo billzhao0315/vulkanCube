@@ -32,6 +32,11 @@ target_include_directories(VulkanCube PRIVATE
     ${THIRDPARTY_DIR}/glm
 )
 
+# ===== STB (header-only image loading) =====
+target_include_directories(VulkanCube PRIVATE
+    ${THIRDPARTY_DIR}/stb
+)
+
 # 推荐：Vulkan 常用（深度 0..1）+ 统一弧度（可选但推荐）
 target_compile_definitions(VulkanCube PRIVATE
     GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -73,4 +78,18 @@ add_custom_command(TARGET VulkanCube POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/shaders
     ${CMAKE_BINARY_DIR}/shaders
+)
+
+# Copy textures to build directory (for running exe directly)
+add_custom_command(TARGET VulkanCube POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/textures
+    $<TARGET_FILE_DIR:VulkanCube>/textures
+)
+
+# Copy textures to CMake binary directory (for VS2022 debugger)
+add_custom_command(TARGET VulkanCube POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/textures
+    ${CMAKE_BINARY_DIR}/textures
 )
